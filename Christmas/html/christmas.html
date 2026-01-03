@@ -70,5 +70,71 @@
 	 					&copy; 2025 Made by Oleh Omelchyshyn
 	 				</p>
 			</footer>
+	<script>
+			  const canvas = document.getElementById("snow");
+			  const ctx = canvas.getContext("2d");
+
+			  let w, h;
+			  let flakes = [];
+
+			  function resize() {
+			    w = canvas.width = window.innerWidth;
+			    h = canvas.height = window.innerHeight;
+			  }
+
+			  window.addEventListener("resize", resize);
+			  resize();
+
+			  function createFlakes(count = 120) {
+			    flakes = [];
+			    for (let i = 0; i < count; i++) {
+			      flakes.push({
+			        x: Math.random() * w,
+			        y: Math.random() * h,
+			        r: Math.random() * 2 + 1,       // размер
+			        d: Math.random() + 0.5,         // плотность
+			        speed: Math.random() * 0.5 + 0.3 // МЕДЛЕННАЯ скорость
+			      });
+			    }
+			  }
+
+			  createFlakes();
+
+			  function draw() {
+			    ctx.clearRect(0, 0, w, h);
+			    ctx.fillStyle = "rgba(255,255,255,0.9)";
+			    ctx.beginPath();
+
+			    for (let f of flakes) {
+			      ctx.moveTo(f.x, f.y);
+			      ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2, true);
+			    }
+
+			    ctx.fill();
+			    move();
+			  }
+
+			  let angle = 0;
+
+			  function move() {
+			    angle += 0.003; // плавное движение
+			    for (let f of flakes) {
+			      f.y += f.speed;
+			      f.x += Math.sin(angle) * 0.3;
+
+			      if (f.y > h) {
+			        f.y = -10;
+			        f.x = Math.random() * w;
+			      }
+			    }
+			  }
+
+			  function animate() {
+			    draw();
+			    requestAnimationFrame(animate);
+			  }
+
+			  animate();
+	</script>
 </body>
 </html>
